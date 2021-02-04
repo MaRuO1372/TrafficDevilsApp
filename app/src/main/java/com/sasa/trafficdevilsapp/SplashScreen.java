@@ -66,7 +66,6 @@ public class SplashScreen extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-
                 @Override
                 public void onFailure(@NotNull Call<List<String>> call, @NotNull Throwable t) {
                     Log.d("Main", "Error:" + t.toString());

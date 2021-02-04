@@ -30,6 +30,22 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
+        retrofitStart();
+    }
+
+    public boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        return ni != null;
+    }
+
+    public void gameStart(){
+        Intent intent = new Intent(SplashScreen.this, GameActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void retrofitStart(){
         //retrofit
         Retrofit retrofit = RetrofitClient.getInstance();
         Holder holder = retrofit.create(Holder.class);
@@ -54,21 +70,11 @@ public class SplashScreen extends AppCompatActivity {
                 @Override
                 public void onFailure(@NotNull Call<List<String>> call, @NotNull Throwable t) {
                     Log.d("Main", "Error:" + t.toString());
-                    Intent intent = new Intent(SplashScreen.this, GameActivity.class);
-                    startActivity(intent);
-                    finish();
+                    gameStart();
                 }
             });
         } else {
-            Intent intent = new Intent(SplashScreen.this, GameActivity.class);
-            startActivity(intent);
-            finish();
+            gameStart();
         }
-    }
-
-    public boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        return ni != null;
     }
 }

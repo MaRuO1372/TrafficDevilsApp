@@ -10,13 +10,13 @@ public class Data {
 
     @SerializedName("payload")
     @Expose
-    private Payload payload;
+    private Object payload;
 
     public String getType() {
         return type;
     }
 
-    public Payload getPayload() {
+    public Object getPayload() {
         return payload;
     }
 

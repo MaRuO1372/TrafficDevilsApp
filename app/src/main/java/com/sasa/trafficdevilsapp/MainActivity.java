@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -25,13 +26,12 @@ import com.sasa.trafficdevilsapp.Retrofit.RetrofitClient;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
-import static java.lang.String.valueOf;
 
 public class MainActivity extends AppCompatActivity {
     private String trends;
@@ -114,10 +114,13 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 Data finalData = response.body();
+                trends = finalData.getPayload().toString().split("=", 2)[1].replaceAll(Pattern.quote("}"), " ");
+                //String test = trends.split("=")[1].replaceAll(Pattern.quote("}"), " ");
+
+                Log.d("main_trd", trends);
                 if(finalData.getType().contains("text")){
-                    textView.setText(finalData.getPayload().getText());
+                    textView.setText(trends);
                 }else if(finalData.getType().contains("webpage")){
-                    trends = finalData.getPayload().getUrl();
                     webView.loadUrl(trends);
                 }else {
                     Intent intent = new Intent(MainActivity.this, GameActivity.class);
@@ -128,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NotNull Call<Data> call, @NotNull Throwable t) {
+                Log.d("Main", "Error:" + t.toString());
                 Intent intent = new Intent(MainActivity.this, GameActivity.class);
                 startActivity(intent);
                 finish();
